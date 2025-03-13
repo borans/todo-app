@@ -17,4 +17,23 @@ public class Task {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public boolean isDoneFlag() {
+        return doneFlag;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }
