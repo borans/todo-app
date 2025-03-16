@@ -1,8 +1,15 @@
 package com.todo.todo_app.service;
 
+import com.todo.todo_app.dto.TaskCreationRequest;
+import com.todo.todo_app.dto.TaskDto;
 import com.todo.todo_app.dto.converter.TaskDtoConverter;
+import com.todo.todo_app.exception.TaskNotFoundException;
+import com.todo.todo_app.model.Task;
+import com.todo.todo_app.model.User;
 import com.todo.todo_app.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TaskService {
@@ -18,32 +25,47 @@ public class TaskService {
     }
 
 
-    // get all tasks of a user by userid
+    protected Task findTask(String taskId) {
+        return taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Could Not Find By Id: " + taskId));
+    }
 
+    // get a task by taskid
+    public TaskDto getTask(String taskId) {
+        return taskDtoConverter.convert(findTask(taskId));
+    }
 
-    // get all undone tasks of a user by userid
+    // create a task
+    public TaskDto createTask(TaskCreationRequest taskCreationRequest) {
 
+        User ownerUser = userService.findUserById(taskCreationRequest.getUserId());
 
-    // get all done tasks of a user by userid
+        Task task = new Task(taskCreationRequest.getName(),
+                taskCreationRequest.getDescription(),
+                ownerUser);
 
+        return taskDtoConverter.convert(taskRepository.save(task));
+    }
 
-    // create a task for a user by userid
+    //update task description
+    public void updateTaskDescription(TaskDto taskDto) {
+        Task task = findTask(taskDto.getTaskId());
+        task.setTaskDescription(taskDto.getTaskDescription());
 
+        taskRepository.save(task);
+    }
 
-    // get a user's task by userid and taskid
+    //update a task as done if it is undone
+    public void updateTaskAsDone(String taskId) {
+        Task task = findTask(taskId);
+        task.setDoneFlag(true);
 
+        taskRepository.save(task);
+    }
 
-    //update a user's task by userid and taskid
-
-
-    //update a user's task as done if it is undone by userid and taskid
-
-
-    //update a user's task as undone if it is done by userid and taskid
-
-
-    //delete a user's task by userid and taskid
-
+    //delete a task
+    public void deleteTask(String taskId) {
+        taskRepository.deleteById(taskId);
+    }
 
 
 }

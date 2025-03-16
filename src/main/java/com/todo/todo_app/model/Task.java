@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String taskId;
     private String taskName;
     private String taskDescription;
@@ -16,6 +16,21 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Task(String taskName, String taskDescription, User user) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.doneFlag = false;
+        this.user = user;
+    }
+
+    public void setDoneFlag(boolean doneFlag) {
+        this.doneFlag = doneFlag;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
 
     public String getTaskId() {
         return taskId;

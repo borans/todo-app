@@ -22,4 +22,23 @@ public class TaskDto {
         this.user = user;
     }
 
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public boolean isDoneFlag() {
+        return doneFlag;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
 }
